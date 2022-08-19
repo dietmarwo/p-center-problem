@@ -23,7 +23,7 @@ Using
     opt = Bite_cpp(max_evaluations, popsize=500)
  
 computation needs about 4 minutes, but result is radius = 7.088 (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/optimize_nd.pdf)
-compared to 8.667 for vorheur.py (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/vorheur_sol.pdf).
+compared to 8.667 for vorheur.py (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/vorheur_sol.pdf), this is > 22% difference. 
 
 Using     
 
@@ -31,6 +31,8 @@ Using
     opt = Bite_cpp(max_evaluations)
 
 computation takes less than a minute resulting in radius = 7.64.
+
+For p=40 the difference grows: vorheur radius 6.312 compared to 5.0825 for fcmaes, more than 24% more, where fcmeas took about 1000 seconds .
 
 ## Original readme
 
