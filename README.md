@@ -38,6 +38,7 @@ Note that the comparison is not completely fair: Since random demand points are 
 is no random demand point in this area. This could be mitigated by using a fixed pattern instead of a random distribution or by increasing the
 number of random points. But increasing their number can have a dramatic performance impact because of CPU-cache overloading issues.
 But for real world application: Justify these tiny holes a 24% radius penalty?  
+Using a fixed pattern in connection with the `radius` parameter of matplotlib.path.contains_points this issue can be completely avoided if required. 
 
 ## Original readme
 
