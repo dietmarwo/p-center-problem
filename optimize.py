@@ -9,17 +9,17 @@
 # Compare with 'python vorheur.py -p 20 -o belle_outer -i belle_botany2,belle_dock,belle_pavillion1,belle_pond1,belle_pond3,belle_pond5,belle_botany,belle_playground,belle_pond2,belle_pond4,belle_tennis_court'
 # 
 # Using 
-#   max_evaluations = 200000
+#    max_evaluations = 200000
 #    opt = Bite_cpp(max_evaluations, popsize=500)
 # 
-# Computation needs time, but result is radius = 7.19 (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/optimize_nd.pdf)
-# compared to 8.667 for vorheur.py (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/vorheur_sol.pdf).
+# computation needs about 205 seconds, but result is radius = 7.146 (https://github.com/dietmarwo/p-center-problem/blob/master/fcmaes_nd.p20.pdf)
+# compared to 8.667 for vorheur.py (https://github.com/dietmarwo/p-center-problem/blob/master/vorheur_sol.p20.pdf), this is > 21% difference. 
 #
 # Using     
-#   max_evaluations = 50000
-#   opt = Bite_cpp(max_evaluations)
+#    max_evaluations = 50000
+#    opt = Bite_cpp(max_evaluations)
 #
-# computation takes less than a minute resulting in radius = 7.64
+# computation takes 52 seconds resulting in radius = 7.57.
 
 import numpy as np
 import matplotlib.path as mpltPath
