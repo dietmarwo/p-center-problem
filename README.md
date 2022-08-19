@@ -12,7 +12,7 @@ Idea is:
  - Use all vertices of the outer polygon and from all holes as demand points.
  - Add random demand points filtered according to feasibility: Inside outer, outside the holes. 
  - Uses matplotlib.path.contains_points to determine if a point is valid.
- - Uses https://numba.pydata.org/[numba] to speed uo the fitness calculation. 
+ - Uses https://numba.pydata.org/[numba] to speed up the fitness calculation. 
  - Utilizes modern many-core CPUs, tested on the AMD 5950x 16 core CPU. 
 
 Compare with 'python vorheur.py -p 20 -o belle_outer -i belle_botany2,belle_dock,belle_pavillion1,belle_pond1,belle_pond3,belle_pond5,belle_botany,belle_playground,belle_pond2,belle_pond4,belle_tennis_court'
@@ -32,7 +32,7 @@ Using
 
 computation takes less than a minute resulting in radius = 7.64.
 
-## original readme
+## Original readme
 
 The stand-alone program vorheur.py solves the p-center area coverage problem. 
 
