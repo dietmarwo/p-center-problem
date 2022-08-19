@@ -10,7 +10,7 @@ See https://github.com/dietmarwo/p-center-problem/blob/master/optimize.py .
 Idea is:
 
  - Use all vertices of the outer polygon and from all holes as demand points.
- - Add random demand points filtered according to feasibility: Inside outer, outside the holes. 
+ - Add a grid of about 10000 demand points filtered according to feasibility: Inside the outer polygon, outside the holes. 
  - Uses matplotlib.path.contains_points to determine if a point is valid.
  - Uses https://numba.pydata.org/[numba] to speed up the fitness calculation. 
  - Utilizes modern many-core CPUs, tested on the AMD 5950x 16 core CPU. 
@@ -22,24 +22,23 @@ Using
     max_evaluations = 200000
     opt = Bite_cpp(max_evaluations, popsize=500)
  
-computation needs about 4 minutes, but result is radius = 7.088 (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/optimize_nd.pdf)
-compared to 8.667 for vorheur.py (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/vorheur_sol.pdf), this is > 22% difference. 
+computation needs about 205 seconds, but result is radius = 7.146 (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/optimize_nd.pdf)
+compared to 8.667 for vorheur.py (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/vorheur_sol.pdf), this is > 21% difference. 
 
 Using     
 
     max_evaluations = 50000
     opt = Bite_cpp(max_evaluations)
 
-computation takes less than a minute resulting in radius = 7.64.
+computation takes 52 seconds resulting in radius = 7.57.
 
-For p=40 the difference grows: vorheur radius 6.312 compared to 5.0825 for fcmaes, more than 24% more, where fcmaes took about 1000 seconds .
+For p=40 the difference grows: vorheur radius 6.312 compared to 5.117 for fcmaes, more than 23% more, where fcmaes took about 1000 seconds .
 
-Note that the comparison is not completely fair: Since random demand points are used there can be very minor "coverage holes" when there
-is no random demand point in this area. This could be mitigated by using a fixed pattern instead of a random distribution or by increasing the
-number of random points. Unfortunately increasing this number can have a dramatic performance impact because of CPU-cache overloading issues, 
-therefore we generate only 10000 random points before filtering. 
-Using a fixed pattern in connection with the `radius` parameter of matplotlib.path.contains_points this issue can be completely avoided if required. 
-But for real world application: Justify these tiny holes a 24% radius penalty? 
+![vorheur.py result for p=40](volheur.p40.png)
+
+![optimize.py result for p=40 showing the demand point grid](fcmaes.p40.png)
+
+Note that the comparison is not completely fair: Since a demand point grid is used there can be minor "coverage holes" when there is no demand point in this area. But since the used grid has a configured distance of 0.5, increasing the radius by at most 0.25 should fill the "holes". 
 
 ## Original readme
 

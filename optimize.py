@@ -2,7 +2,7 @@
 # @author: Dietmar Wolz
 # Idea is:
 # - Use all vertices of the outer polygon and from all holes as demand points.
-# - Add random demand points filtered according to feasibility: Inside outer, outside the holes. 
+# - Add a grid of demand points filtered according to feasibility: Inside the outer polygon, outside the holes.
 # - Uses matplotlib.path.contains_points to determine if a point is valid.
 # - Uses https://numba.pydata.org/[numba] to speed up the fitness calculation .
 # - Utilizes modern many-core CPUs, tested on the AMD 5950x 16 core CPU. 
@@ -12,7 +12,7 @@
 #   max_evaluations = 200000
 #    opt = Bite_cpp(max_evaluations, popsize=500)
 # 
-# Computation needs time, but result is radius = 7.088 (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/optimize_nd.pdf)
+# Computation needs time, but result is radius = 7.19 (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/optimize_nd.pdf)
 # compared to 8.667 for vorheur.py (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/vorheur_sol.pdf).
 #
 # Using     
@@ -27,44 +27,41 @@ from numba import njit
 from fcmaes.optimizer import Bite_cpp, crfmnes_bite, De_cpp, wrapper, logger
 from fcmaes import retry
 from scipy.optimize import Bounds 
-from parse_kml import parse_kml, plot
+from parse_kml import parse_kml, plot    
 
-@njit(fastmath=True)
-def calc_distance_(demands, facilities_x, facilities_y):
-    distance = np.zeros((len(demands), len(facilities_x)))
+@njit(fastmath=True) # maximum of the minimal distances for all demand points
+def fitness_(facilities_x, facilities_y, demands):
+    max_r = 0
     for i in range(len(demands)):
+        min_r = 1E99
         for j in range(len(facilities_x)):
             dx = demands[i,0] - facilities_x[j]
             dy = demands[i,1] - facilities_y[j]
             # we use the square of the distance because it is faster to compute
-            distance[i,j] = dx*dx + dy*dy 
-    return distance      
-
-@njit(fastmath=True) # maximum of the minimal distances for all demand points
-def fitness_(facilities_x, facilities_y, demands):
-    distance = calc_distance_(demands, facilities_x, facilities_y) 
-    maxd = 0
-    for i in range(len(distance)):
-        d = min(distance[i])
-        if maxd < d:
-            maxd = d
-    return maxd
+            r = dx*dx + dy*dy 
+            if r < min_r: min_r = r 
+        if min_r > max_r: max_r = min_r 
+    return np.sqrt(max_r)
 
 class Fitness():
     
-    def __init__(self, p, corners, holes_corners, num):
+    def __init__(self, p, corners, holes_corners, tolerance):
         self.p = p
         self.dim = self.p * 2
         cmax = np.amax(corners, axis=0)
         cmin = np.amin(corners, axis=0)
         lower = [cmin[0]]*p + [cmin[1]]*p
         upper = [cmax[0]]*p + [cmax[1]]*p
-        self.generate_demands(num, cmin, cmax, corners, holes_corners)
+        self.generate_demands(tolerance, cmin, cmax, corners, holes_corners)
         #self.generate_minimal_demands(corners, holes_corners)
         self.bounds = Bounds(lower, upper) 
         
-    def generate_demands(self, num, cmin, cmax, corners, holes_corners):
-        demands = cmin + (cmax-cmin)*np.random.rand(num, 2)
+    def generate_demands(self, tolerance, cmin, cmax, corners, holes_corners):
+        x = np.arange(cmin[0], cmax[0], tolerance)
+        y = np.arange(cmin[1], cmax[1], tolerance)
+        xs, ys = np.meshgrid(x, y)
+        demands = np.vstack(list(zip(xs.ravel(), ys.ravel()))) # use grid demands    
+        #demands = cmin + (cmax-cmin)*np.random.rand(num, 2) # use random demands
         path = mpltPath.Path(corners,closed=True)
         self.path = path
         self.pathes = []
@@ -102,14 +99,14 @@ def optimize(fit, opt, num_retries = 32):
                                fit.bounds, num_retries = num_retries, 
                                optimizer=opt, logger=logger())    
     print("facility locations = ", fit.get_facilities(ret.x))
-    print("value = ", np.sqrt(ret.fun))
-    return fit.get_facilities(ret.x), np.sqrt(ret.fun)
+    print("value = ", ret.fun)
+    return fit.get_facilities(ret.x), ret.fun
 
-def run_optimize(corners, holes_corners, num=10000, ndepots=20):   
-    fit = Fitness(ndepots, corners, holes_corners, num)
-    max_evaluations = 50000 # takes < 1 minute on AMD 5950x
+def run_optimize(corners, holes_corners, tolerance = 0.5, ndepots=20):   
+    fit = Fitness(ndepots, corners, holes_corners, tolerance)
+    max_evaluations = 50000 # takes < 52 seconds on AMD 5950x
     opt = Bite_cpp(max_evaluations)
-    # max_evaluations = 200000 # takes < 4 minutes on AMD 5950x
+    # max_evaluations = 200000 # takes < 205 seconds on AMD 5950x
     # opt = Bite_cpp(max_evaluations, popsize=512)
    
     facilities, distance = optimize(fit, opt, num_retries = 32)
