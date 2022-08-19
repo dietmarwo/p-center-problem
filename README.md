@@ -32,13 +32,14 @@ Using
 
 computation takes less than a minute resulting in radius = 7.64.
 
-For p=40 the difference grows: vorheur radius 6.312 compared to 5.0825 for fcmaes, more than 24% more, where fcmeas took about 1000 seconds .
+For p=40 the difference grows: vorheur radius 6.312 compared to 5.0825 for fcmaes, more than 24% more, where fcmaes took about 1000 seconds .
 
 Note that the comparison is not completely fair: Since random demand points are used there can be very minor "coverage holes" when there
 is no random demand point in this area. This could be mitigated by using a fixed pattern instead of a random distribution or by increasing the
-number of random points. But increasing their number can have a dramatic performance impact because of CPU-cache overloading issues.
-But for real world application: Justify these tiny holes a 24% radius penalty?  
+number of random points. Unfortunately increasing this number can have a dramatic performance impact because of CPU-cache overloading issues, 
+therefore we generate only 10000 random points before filtering. 
 Using a fixed pattern in connection with the `radius` parameter of matplotlib.path.contains_points this issue can be completely avoided if required. 
+But for real world application: Justify these tiny holes a 24% radius penalty? 
 
 ## Original readme
 
