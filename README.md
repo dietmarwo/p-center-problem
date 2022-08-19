@@ -34,9 +34,9 @@ computation takes 52 seconds resulting in radius = 7.57.
 
 For p=40 the difference grows: vorheur radius 6.312 compared to 5.117 for fcmaes, more than 23% more, where fcmaes took about 1000 seconds .
 
-![vorheur.py result for p=40](volheur.p40.png)
+![Alt](volheur.p40.png "vorheur.py result for p=40")
 
-![optimize.py result for p=40 showing the demand point grid](fcmaes.p40.png)
+![Alt](fcmaes.p40.png "optimize.py result for p=40 showing the demand point grid")
 
 Note that the comparison is not completely fair: Since a demand point grid is used there can be minor "coverage holes" when there is no demand point in this area. But since the used grid has a configured distance of 0.5, increasing the radius by at most 0.25 should fill the "holes". 
 
