@@ -1,5 +1,39 @@
 # p-center-problem
 
+## Changes to the original repo https://github.com/profyliu/p-center-problem 
+
+Adds a generic continuous optimization approach applying the https://github.com/dietmarwo/fast-cma-es library.
+See https://github.com/dietmarwo/p-center-problem/blob/master/optimize.py .
+
+@author: Dietmar Wolz (of the added code). 
+
+Idea is:
+
+ - Use all vertices of the outer polygon and from all holes as demand points.
+ - Add random demand points filtered according to feasibility: Inside outer, outside the holes. 
+ - Uses matplotlib.path.contains_points to determine if a point is valid.
+ - Uses https://numba.pydata.org/[numba] to speed uo the fitness calculation. 
+ - Utilizes modern many-core CPUs, tested on the AMD 5950x 16 core CPU. 
+
+Compare with 'python vorheur.py -p 20 -o belle_outer -i belle_botany2,belle_dock,belle_pavillion1,belle_pond1,belle_pond3,belle_pond5,belle_botany,belle_playground,belle_pond2,belle_pond4,belle_tennis_court'
+ 
+Using
+ 
+    max_evaluations = 200000
+    opt = Bite_cpp(max_evaluations, popsize=500)
+ 
+computation needs about 4 minutes, but result is radius = 7.088 (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/optimize_nd.pdf)
+compared to 8.667 for vorheur.py (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/vorheur_sol.pdf).
+
+Using     
+
+    max_evaluations = 50000
+    opt = Bite_cpp(max_evaluations)
+
+computation takes less than a minute resulting in radius = 7.64.
+
+## original readme
+
 The stand-alone program vorheur.py solves the p-center area coverage problem. 
 
 Usage Examples:
