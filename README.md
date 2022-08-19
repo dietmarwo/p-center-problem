@@ -22,8 +22,8 @@ Using
     max_evaluations = 200000
     opt = Bite_cpp(max_evaluations, popsize=500)
  
-computation needs about 205 seconds, but result is radius = 7.146 (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/optimize_nd.pdf)
-compared to 8.667 for vorheur.py (https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/img/vorheur_sol.pdf), this is > 21% difference. 
+computation needs about 205 seconds, but result is radius = 7.146 (https://github.com/dietmarwo/p-center-problem/blob/master/fcmaes_nd.p20.pdf)
+compared to 8.667 for vorheur.py (https://github.com/dietmarwo/p-center-problem/blob/master/vorheur_sol.p20.pdf), this is > 21% difference. 
 
 Using     
 
