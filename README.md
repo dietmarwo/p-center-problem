@@ -32,7 +32,7 @@ Using
 
 computation takes 52 seconds resulting in radius = 7.57.
 
-For p=40 the difference grows: vorheur radius 6.312 compared to 5.117 for fcmaes, more than 23% more, where fcmaes took about 1000 seconds .
+For p=40 the difference grows: vorheur radius 6.312 compared to 5.117 for fcmaes, more than 23% more, where fcmaes took 942 seconds .
 
 - vorheur.py result for p=40
 
