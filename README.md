@@ -14,6 +14,8 @@ Idea is:
  - Uses matplotlib.path.contains_points to determine if a point is valid.
  - Uses https://numba.pydata.org/[numba] to speed up the fitness calculation. 
  - Utilizes modern many-core CPUs, tested on the AMD 5950x 16 core CPU. 
+ 
+See also https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/5G.adoc[5G tutorial] for a detailed description of the new method.   
 
 Compare with 'python vorheur.py -p 20 -o belle_outer -i belle_botany2,belle_dock,belle_pavillion1,belle_pond1,belle_pond3,belle_pond5,belle_botany,belle_playground,belle_pond2,belle_pond4,belle_tennis_court'
  
@@ -22,8 +24,8 @@ Using
     max_evaluations = 200000
     opt = Bite_cpp(max_evaluations, popsize=500)
  
-computation needs about 205 seconds, but result is radius = 7.146 (https://github.com/dietmarwo/p-center-problem/blob/master/fcmaes_nd.p20.pdf)
-compared to 8.667 for vorheur.py (https://github.com/dietmarwo/p-center-problem/blob/master/vorheur_sol.p20.pdf), this is > 21% difference. 
+computation needs about 205 seconds, result is radius = 7.146 (see https://github.com/dietmarwo/p-center-problem/blob/master/fcmaes_nd.p20.pdf)
+compared to radius = 8.667 for vorheur.py (see https://github.com/dietmarwo/p-center-problem/blob/master/vorheur_sol.p20.pdf), this is > 21% difference. 
 
 Using     
 
@@ -32,7 +34,8 @@ Using
 
 computation takes 52 seconds resulting in radius = 7.57.
 
-For p=40 the difference grows: vorheur radius 6.312 compared to 5.117 for fcmaes, more than 23% more, where fcmaes took 942 seconds .
+For p=40 the difference grows: vorheur.py achieves radius = 6.312 compared to radius = 5.117 for fcmaes, more than 23% more, where fcmaes took 942 seconds .
+If we look at the results we see that vorheur.py covers all holes, where fcmaes uses the fact that these don't need to be covered.
 
 - vorheur.py result for p=40
 
@@ -42,7 +45,7 @@ For p=40 the difference grows: vorheur radius 6.312 compared to 5.117 for fcmaes
 
 <img src="fcmaes.p40.png" title="optimize.py result for p=40 showing the demand point grid">
 
-Note that the comparison is not completely fair: Since a demand point grid is used there can be minor "coverage holes" when there is no demand point in this area. But since the used grid has a configured distance of 0.5, increasing the radius by at most 0.25 fills all "coverage holes". 
+Note that the comparison is not completely fair: Since a demand point grid is used there can be minor "coverage holes" when there is no demand point in this area. But since the used grid has a configured spacing of 0.5, increasing the radius by at most 0.25 fills all "coverage holes". 
 
 ## Original readme
 
