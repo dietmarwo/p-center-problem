@@ -12,10 +12,10 @@ Idea is:
  - Use all vertices of the outer polygon and from all holes as demand points.
  - Add a grid of about 10000 demand points filtered according to feasibility: Inside the outer polygon, outside the holes. 
  - Uses matplotlib.path.contains_points to determine if a point is valid.
- - Uses https://numba.pydata.org/[numba] to speed up the fitness calculation. 
+ - Uses https://numba.pydata.org/ to speed up the fitness calculation. 
  - Utilizes modern many-core CPUs, tested on the AMD 5950x 16 core CPU. 
  
-See also https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/5G.adoc[5G tutorial] for a detailed description of the new method.   
+See also https://github.com/dietmarwo/fast-cma-es/blob/master/tutorials/5G.adoc for a detailed description of the new method.   
 
 Compare with 'python vorheur.py -p 20 -o belle_outer -i belle_botany2,belle_dock,belle_pavillion1,belle_pond1,belle_pond3,belle_pond5,belle_botany,belle_playground,belle_pond2,belle_pond4,belle_tennis_court'
  
